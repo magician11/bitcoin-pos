@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField';
 const queryString = require('query-string');
+const btcLogo = require('./images/Bitcoin.png');
 
 const styles = theme => ({
   paper: {
@@ -28,6 +29,10 @@ const styles = theme => ({
   },
   input: {
     fontSize: 33
+  },
+  logo: {
+    width: 44,
+    marginRight: 11
   }
 });
 
@@ -126,6 +131,7 @@ class App extends Component {
         <CssBaseline />
         <AppBar position="static">
           <Toolbar>
+            <img src={btcLogo} className={classes.logo} alt="Bitcoin logo" />
             <Typography variant="title" color="inherit">
               Bitcoin POS
             </Typography>
