@@ -5,20 +5,17 @@ import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField';
 const queryString = require('query-string');
+const axios = require('axios');
 const btcLogo = require('./images/Bitcoin.png');
 
 const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 2,
-    marginTop: theme.spacing.unit * 3,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    margin: theme.spacing.unit * 2
   },
   control: {
     padding: theme.spacing.unit * 2
@@ -51,7 +48,6 @@ const NumberFormatCustom = props => {
         });
       }}
       thousandSeparator
-      prefix="$ "
       allowNegative={false}
     />
   );
@@ -78,52 +74,89 @@ class App extends Component {
     }
   };
 
-  handleChange = event => {
-    this.setState({
-      numberFormat: event.target.value
-    });
+  getBtcEquivalent = async numberFormat => {
+    const { currency } = this.state;
+
+    try {
+      const response = await axios(
+        `https://blockchain.info/tobtc?currency=${currency}&value=${parseFloat(
+          numberFormat
+        )}`
+      );
+      this.setState({
+        btcEquiv: response.data
+      });
+    } catch (error) {
+      throw error;
+    }
   };
+
+  handleChange = event => {
+    const numberFormat = event.target.value;
+    this.setState({ numberFormat });
+    if (numberFormat) {
+      this.getBtcEquivalent(numberFormat);
+    }
+  };
+
+  validAmount = () =>
+    this.state.numberFormat !== '' && parseFloat(this.state.numberFormat) !== 0;
 
   render() {
     const { classes } = this.props;
-    const { numberFormat, currency, error } = this.state;
+    const { numberFormat, currency, error, btcAddress, btcEquiv } = this.state;
 
     let appContent;
 
     if (error) {
       appContent = (
-        <Paper className={classes.paper}>
-          <Typography variant="headline" align="center">
-            {error}
-          </Typography>
-        </Paper>
+        <Grid item xs={10} md={4}>
+          <Paper className={classes.paper}>
+            <Typography variant="headline" align="center">
+              {error}
+            </Typography>
+          </Paper>
+        </Grid>
       );
     } else {
       appContent = (
-        <Paper className={classes.paper}>
-          <TextField
-            label={`Amount in ${currency}`}
-            value={numberFormat}
-            className={classes.input}
-            autoFocus
-            fullWidth
-            onChange={this.handleChange}
-            InputProps={{
-              inputComponent: NumberFormatCustom,
-              classes: {
-                input: classes.input
-              }
-            }}
-          />
-          <Button
-            variant="raised"
-            color="primary"
-            className={classes.button}
-            disabled={numberFormat === '' || parseFloat(numberFormat) === 0}
-          >
-            Generate QR Code
-          </Button>
-        </Paper>
+        <React.Fragment>
+          <Grid item xs={10} md={4}>
+            <Paper className={classes.paper}>
+              <TextField
+                label={`Amount in ${currency}`}
+                value={numberFormat}
+                className={classes.input}
+                autoFocus
+                fullWidth
+                onChange={this.handleChange}
+                InputProps={{
+                  inputComponent: NumberFormatCustom,
+                  classes: {
+                    input: classes.input
+                  }
+                }}
+              />
+            </Paper>
+          </Grid>
+          {this.validAmount() && (
+            <Grid item xs={10} md={4}>
+              <Paper className={classes.paper}>
+                <Typography variant="title">QR Code</Typography>
+                <img
+                  src={`https://chart.googleapis.com/chart?chs=225x225&chld=L|2&cht=qr&chl=bitcoin:${btcAddress}?amount=${btcEquiv}`}
+                  alt="QR code"
+                />
+                <Typography variant="body1">
+                  BTC equivalent: {btcEquiv}
+                </Typography>
+                <Typography variant="caption">
+                  BTC Address: {btcAddress}
+                </Typography>
+              </Paper>
+            </Grid>
+          )}
+        </React.Fragment>
       );
     }
     return (
@@ -138,9 +171,7 @@ class App extends Component {
           </Toolbar>
         </AppBar>
         <Grid container justify="center">
-          <Grid item xs={10} sm={6} md={4}>
-            {appContent}
-          </Grid>
+          {appContent}
         </Grid>
       </React.Fragment>
     );
