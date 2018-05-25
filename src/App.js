@@ -15,7 +15,10 @@ const btcLogo = require('./images/Bitcoin.png');
 const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 2,
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing.unit * 2,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   control: {
     padding: theme.spacing.unit * 2
@@ -74,21 +77,22 @@ class App extends Component {
     }
   };
 
-  getBtcEquivalent = async numberFormat => {
+  getBtcEquivalent = numberFormat => {
     const { currency } = this.state;
 
-    try {
-      const response = await axios(
-        `https://blockchain.info/tobtc?currency=${currency}&value=${parseFloat(
-          numberFormat
-        )}`
-      );
-      this.setState({
-        btcEquiv: response.data
+    axios(
+      `https://blockchain.info/tobtc?currency=${currency}&value=${parseFloat(
+        numberFormat
+      )}`
+    )
+      .then(response => {
+        this.setState({
+          btcEquiv: response.data
+        });
+      })
+      .catch(error => {
+        this.setState({ error: error.response.data });
       });
-    } catch (error) {
-      throw error;
-    }
   };
 
   handleChange = event => {
