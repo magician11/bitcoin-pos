@@ -17,7 +17,10 @@ const magicNumber = 11;
 const styles = theme => ({
   paper: {
     padding: magicNumber * 2,
-    margin: magicNumber * 2
+    margin: magicNumber
+  },
+  main: {
+    marginTop: magicNumber
   },
   input: {
     fontSize: magicNumber * 3
@@ -32,6 +35,9 @@ const styles = theme => ({
   loader: {
     fontSize: magicNumber * 3,
     margin: magicNumber * 2
+  },
+  footer: {
+    marginBottom: magicNumber
   }
 });
 
@@ -249,9 +255,9 @@ class App extends Component {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Grid container justify="center">
+        <Grid container justify="center" className={classes.main}>
           {appContent}
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.footer}>
             <Typography variant="body1" align="center" gutterBottom>
               Questions? Email{' '}
               <a href="mailto:support@andrewgolightly.com">
