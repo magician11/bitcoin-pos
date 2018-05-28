@@ -14,10 +14,7 @@ const btcLogo = require('./images/Bitcoin.png');
 const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 2,
-    margin: theme.spacing.unit * 2,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
+    margin: theme.spacing.unit * 2
   },
   control: {
     padding: theme.spacing.unit * 2
@@ -84,11 +81,6 @@ class App extends Component {
 
     if (currency && btcAddress) {
       this.setState({ currency, btcAddress });
-    } else {
-      this.setState({
-        error:
-          'This app requires both a currency and a btcAddress parameter in the URL.'
-      });
     }
   };
 
@@ -133,6 +125,62 @@ class App extends Component {
           <Paper className={classes.paper}>
             <Typography variant="headline" align="center">
               {error}
+            </Typography>
+          </Paper>
+        </Grid>
+      );
+    } else if (!currency || !btcAddress) {
+      appContent = (
+        <Grid item xs={12} md={6}>
+          <Paper className={classes.paper}>
+            <Typography variant="headline" gutterBottom>
+              Welcome to the Bitcoin POS
+            </Typography>
+            <Typography variant="subheading" gutterBottom>
+              This app will quickly and easily generate a QR code for you to
+              enable you to accept Bitcoin.
+            </Typography>
+          </Paper>
+          <Paper className={classes.paper}>
+            <Typography variant="headline" gutterBottom>
+              Quick setup
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              To customise this app to work for you, all you need to do is
+              update the URL with your desired fiat currency and Bitcoin
+              address.
+            </Typography>
+            <Typography variant="caption" gutterBottom>
+              format:
+              https://bitcoin-pos.golightlyplus.com/?currency=[currency]&btcAddress=[public
+              address]
+            </Typography>
+            <Typography variant="body1">Where:</Typography>
+            <Typography variant="body1">
+              * currency is an acronym like USD.{' '}
+              <a href="https://blockchain.info/api/exchange_rates_api">
+                View available currencies
+              </a>.
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              * public address is your public bitcoin address.
+            </Typography>
+            <Typography variant="body1">
+              To view a working URL demo,{' '}
+              <a href="https://bitcoin-pos.golightlyplus.com/?currency=USD&btcAddress=1NmFvR5HZctvRBpHZnPoAqJ4GoVeQaMus7">
+                click here
+              </a>.
+            </Typography>
+          </Paper>
+          <Paper className={classes.paper}>
+            <Typography variant="headline" gutterBottom>
+              How to use the app
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+              Simply enter the sale price in your chosen currency, and
+              everything else will be done for you to generate the QR code to
+              allow the buyer to send the bitcoin equivalent amount to your
+              bitcoin address.
             </Typography>
           </Paper>
         </Grid>
@@ -191,6 +239,18 @@ class App extends Component {
         </AppBar>
         <Grid container justify="center">
           {appContent}
+          <Grid item xs={12}>
+            <Typography variant="body1" align="center" gutterBottom>
+              Questions? Email{' '}
+              <a href="mailto:support@andrewgolightly.com">
+                support@andrewgolighly.com
+              </a>
+            </Typography>
+            <Typography variant="body1" align="center" gutterBottom>
+              Source code is available on{' '}
+              <a href="https://github.com/magician11/bitcoin-pos">GitHub</a>
+            </Typography>
+          </Grid>
         </Grid>
       </React.Fragment>
     );

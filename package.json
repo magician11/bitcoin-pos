@@ -1,6 +1,7 @@
 {
   "name": "bitcoin-pos",
   "version": "0.1.1",
+  "homepage": "https://bitcoin-pos.golightlyplus.com",
   "dependencies": {
     "@material-ui/core": "^1.0.0",
     "axios": "^0.18.0",
