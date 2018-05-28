@@ -8,7 +8,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField';
-const queryString = require('query-string');
 const axios = require('axios');
 const btcLogo = require('./images/Bitcoin.png');
 
@@ -64,8 +63,24 @@ class App extends Component {
     btcAddress: ''
   };
 
+  // derived from https://stackoverflow.com/a/2880929/2813041
+  getURLparams = () => {
+    const pl = /\+/g;
+    const search = /([^&=]+)=?([^&]*)/g;
+    const decode = s => decodeURIComponent(s.replace(pl, ' '));
+    const query = window.location.search.substring(1);
+
+    const urlParams = {};
+    let match;
+    while ((match = search.exec(query))) {
+      urlParams[decode(match[1])] = decode(match[2]);
+    }
+
+    return urlParams;
+  };
+
   componentDidMount = () => {
-    const { currency, btcAddress } = queryString.parse(window.location.search);
+    const { currency, btcAddress } = this.getURLparams();
 
     if (currency && btcAddress) {
       this.setState({ currency, btcAddress });
