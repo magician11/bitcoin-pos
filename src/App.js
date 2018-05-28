@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField';
 const axios = require('axios');
+const moment = require('moment');
 const btcLogo = require('./images/Bitcoin.png');
 
 const styles = theme => ({
@@ -81,33 +82,26 @@ class App extends Component {
 
     if (currency && btcAddress) {
       this.setState({ currency, btcAddress });
+      this.getExchangeRate(currency);
     }
   };
 
-  getBtcEquivalent = numberFormat => {
-    const { currency } = this.state;
-
-    axios(
-      `https://blockchain.info/tobtc?currency=${currency}&value=${parseFloat(
-        numberFormat
-      )}`
-    )
-      .then(response => {
-        this.setState({
-          btcEquiv: response.data
-        });
-      })
-      .catch(error => {
-        this.setState({ error: error.response.data });
+  getExchangeRate = async currency => {
+    try {
+      const response = await axios('https://blockchain.info/ticker');
+      this.setState({
+        fiatValue: response.data[currency].last,
+        currencySymbol: response.data[currency].symbol,
+        lastUpdated: moment()
       });
+    } catch (error) {
+      this.setState({ error: error.response.data });
+    }
   };
 
   handleChange = event => {
     const numberFormat = event.target.value;
     this.setState({ numberFormat });
-    if (numberFormat) {
-      this.getBtcEquivalent(numberFormat);
-    }
   };
 
   validAmount = () =>
@@ -115,7 +109,15 @@ class App extends Component {
 
   render() {
     const { classes } = this.props;
-    const { numberFormat, currency, error, btcAddress, btcEquiv } = this.state;
+    const {
+      numberFormat,
+      currency,
+      error,
+      btcAddress,
+      fiatValue,
+      currencySymbol,
+      lastUpdated
+    } = this.state;
 
     let appContent;
 
@@ -186,12 +188,18 @@ class App extends Component {
         </Grid>
       );
     } else {
+      /*
+      bitcoins are divisible down to 8 decimal places
+      https://en.bitcoin.it/wiki/Help:FAQ#How_divisible_are_bitcoins.3F
+      */
+      const btcEquiv = (numberFormat / fiatValue).toFixed(8);
+
       appContent = (
         <React.Fragment>
           <Grid item xs={10} md={4}>
             <Paper className={classes.paper}>
               <TextField
-                label={`Amount in ${currency}`}
+                label={`Amount in ${currency} (${currencySymbol})`}
                 value={numberFormat}
                 className={classes.input}
                 autoFocus
@@ -215,7 +223,21 @@ class App extends Component {
                   alt="QR code"
                 />
                 <Typography variant="body1">
-                  BTC equivalent: {btcEquiv}
+                  1 BTC = {currencySymbol}
+                  {fiatValue} {currency}
+                </Typography>
+                <Typography variant="caption" gutterBottom>
+                  Exchange rate last updated:{' '}
+                  {lastUpdated.format('MMMM Do YYYY, h:mm:ss a')}
+                </Typography>
+                <Typography variant="body1">
+                  <NumberFormat
+                    value={numberFormat}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={currencySymbol}
+                  />{' '}
+                  {currency} = {btcEquiv} BTC
                 </Typography>
                 <Typography variant="caption">
                   BTC Address: {btcAddress}
