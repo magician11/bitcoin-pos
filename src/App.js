@@ -5,6 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Toolbar from '@material-ui/core/Toolbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import TextField from '@material-ui/core/TextField';
@@ -12,53 +13,35 @@ const axios = require('axios');
 const moment = require('moment');
 const btcLogo = require('./images/Bitcoin.png');
 
+const magicNumber = 11;
 const styles = theme => ({
   paper: {
-    padding: theme.spacing.unit * 2,
-    margin: theme.spacing.unit * 2
-  },
-  control: {
-    padding: theme.spacing.unit * 2
-  },
-  button: {
-    marginTop: theme.spacing.unit * 2,
-    width: 200
+    padding: magicNumber * 2,
+    margin: magicNumber * 2
   },
   input: {
-    fontSize: 33
+    fontSize: magicNumber * 3
+  },
+  inputLabel: {
+    fontSize: magicNumber * 2
   },
   logo: {
-    width: 44,
-    marginRight: 11
+    width: magicNumber * 4,
+    marginRight: magicNumber
+  },
+  loader: {
+    fontSize: magicNumber * 3,
+    margin: magicNumber * 2
   }
 });
-
-const NumberFormatCustom = props => {
-  const { inputRef, onChange, ...other } = props;
-
-  return (
-    <NumberFormat
-      {...other}
-      ref={inputRef}
-      onValueChange={values => {
-        onChange({
-          target: {
-            value: values.value
-          }
-        });
-      }}
-      thousandSeparator
-      allowNegative={false}
-    />
-  );
-};
 
 class App extends Component {
   state = {
     numberFormat: '',
     currency: '',
     error: null,
-    btcAddress: ''
+    btcAddress: '',
+    loading: true
   };
 
   // derived from https://stackoverflow.com/a/2880929/2813041
@@ -92,7 +75,8 @@ class App extends Component {
       this.setState({
         fiatValue: response.data[currency].last,
         currencySymbol: response.data[currency].symbol,
-        lastUpdated: moment()
+        lastUpdated: moment(),
+        loading: false
       });
     } catch (error) {
       this.setState({ error: error.response.data });
@@ -116,12 +100,15 @@ class App extends Component {
       btcAddress,
       fiatValue,
       currencySymbol,
-      lastUpdated
+      lastUpdated,
+      loading
     } = this.state;
 
     let appContent;
 
-    if (error) {
+    if (loading) {
+      appContent = <CircularProgress className={classes.loader} />;
+    } else if (error) {
       appContent = (
         <Grid item xs={10} md={4}>
           <Paper className={classes.paper}>
@@ -204,9 +191,12 @@ class App extends Component {
                 className={classes.input}
                 autoFocus
                 fullWidth
+                type="number"
                 onChange={this.handleChange}
+                InputLabelProps={{
+                  className: classes.inputLabel
+                }}
                 InputProps={{
-                  inputComponent: NumberFormatCustom,
                   classes: {
                     input: classes.input
                   }
