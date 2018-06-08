@@ -51,7 +51,7 @@ class Welcome extends Component {
           </Typography>
           <Typography variant="body1">
             To view a working URL demo,{' '}
-            <a href="https://bitcoin-pos.golightlyplus.com/?currency=USD&btcAddress=1NmFvR5HZctvRBpHZnPoAqJ4GoVeQaMus7">
+            <a href="https://bitcoin-pos.golightlyplus.com/?currency=USD&btcAddress=1CXxYSYKTxTGhXsECmAQfe4sPkUgaedNmH">
               click here
             </a>.
           </Typography>
