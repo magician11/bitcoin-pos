@@ -1,4 +1,4 @@
-# Bitcoin POS
+# Bitcoin Point of Sale
 
 This is a web app that is designed to make it super easy for any business to accept Bitcoin.
 

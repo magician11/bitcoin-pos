@@ -1,9 +1,20 @@
-const magicNumber = 11;
+export const magicNumber = 11;
+export const loader = {
+  fontSize: magicNumber * 3,
+  margin: magicNumber * 2
+};
+export const paper = {
+  padding: magicNumber * 2,
+  margin: magicNumber
+};
+export const marginTop = {
+  marginTop: magicNumber
+};
+export const padding = {
+  padding: magicNumber
+};
+
 const coreStyles = {
-  paper: {
-    padding: magicNumber * 2,
-    margin: magicNumber
-  },
   centerChilden: {
     display: 'flex',
     flexDirection: 'column',
@@ -25,10 +36,7 @@ const coreStyles = {
     width: magicNumber * 4,
     marginRight: magicNumber
   },
-  loader: {
-    fontSize: magicNumber * 3,
-    margin: magicNumber * 2
-  },
+
   button: {
     marginTop: magicNumber
   },
@@ -37,4 +45,4 @@ const coreStyles = {
   }
 };
 
-module.exports = { coreStyles };
+// module.exports = { coreStyles };
