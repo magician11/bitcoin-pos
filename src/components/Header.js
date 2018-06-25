@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -19,32 +20,33 @@ const styles = () => ({
 
 class Header extends Component {
   render() {
-    const { classes } = this.props;
+    const { classes, exchangeRateData, currency, loading } = this.props;
     return (
       <AppBar position="static">
         <Toolbar>
-          <img
-            src={btcLogo}
-            className={this.props.classes.logo}
-            alt="Bitcoin logo"
-          />
+          <img src={btcLogo} className={classes.logo} alt="Bitcoin logo" />
           <Typography
             variant="title"
             color="inherit"
             className={classes.expand}
           >
-            Bitcoin{' '}
-            <Typography variant="subheading" color="inherit">
-              Point of Sale
+            Bitcoin<br />
+            <small>Point of Sale</small>
+          </Typography>
+          {!loading && (
+            <Typography variant="body1" color="inherit">
+              1 BTC = {exchangeRateData[currency].symbol}
+              {exchangeRateData[currency].last.toFixed(2)} {currency}
             </Typography>
-          </Typography>
-          <Typography variant="body1" color="inherit" align="right">
-            1 BTC = $ 1000.89 USD
-          </Typography>
+          )}
         </Toolbar>
       </AppBar>
     );
   }
 }
 
-export default withStyles(styles)(Header);
+const mapStateToProps = ({ exchangeRateData, currency, loading }) => {
+  return { exchangeRateData, currency, loading };
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(Header));
