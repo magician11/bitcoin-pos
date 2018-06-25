@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter, Redirect } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
@@ -13,7 +14,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 import { paper, magicNumber, loader } from '../styles';
-import { getURLparams } from '../utils';
+// import { getURLparams } from '../utils';
 import * as actions from '../actions';
 
 const styles = theme => ({
@@ -37,18 +38,14 @@ const styles = theme => ({
 class Welcome extends Component {
   componentDidMount = () => {
     this.props.fetchExchangeRateData();
-
-    const { currency, btcAddress } = getURLparams();
-    if (currency) {
-      this.props.setCurrency(currency);
-    }
-    if (btcAddress) {
-      this.props.setBTCaddress(btcAddress);
-    }
-  };
-
-  handleSubmit = () => {
-    console.log('handling submit..');
+    //
+    // const { currency, btcAddress } = getURLparams();
+    // if (currency) {
+    //   this.props.setCurrency(currency);
+    // }
+    // if (btcAddress) {
+    //   this.props.setBTCaddress(btcAddress);
+    // }
   };
 
   handleChange = event => {
@@ -71,6 +68,9 @@ class Welcome extends Component {
 
     let content;
     if (loading) {
+      if (btcAddress && currency) {
+        return <Redirect to={'/point-of-sale'} />;
+      }
       content = <CircularProgress className={classes.loader} />;
     } else {
       const currencies = Object.keys(exchangeRateData).map(currency => (
@@ -126,26 +126,10 @@ class Welcome extends Component {
               color="primary"
               className={classes.margin}
               disabled={btcAddress === '' || currency === ''}
-              onClick={this.generateQRcode}
+              onClick={() => this.props.history.push('/point-of-sale')}
             >
               Begin
             </Button>
-          </Paper>
-          <Paper className={classes.paper}>
-            <Typography variant="headline" gutterBottom>
-              Super fast setup
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              To avoid having to enter your Bitcoin address everytime here when
-              you load this app, you can simply bookmark the next page in your
-              browser.
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              To view a demo of a bookmarked URL in action,{' '}
-              <a href="/?currency=USD&btcAddress=1CXxYSYKTxTGhXsECmAQfe4sPkUgaedNmH">
-                click here
-              </a>.
-            </Typography>
           </Paper>
         </Grid>
       );
@@ -164,42 +148,23 @@ const mapStateToProps = ({
   return { currency, btcAddress, exchangeRateData, loading };
 };
 
-export default connect(mapStateToProps, actions)(withStyles(styles)(Welcome));
+export default connect(mapStateToProps, actions)(
+  withRouter(withStyles(styles)(Welcome))
+);
 
-// <Typography variant="caption" gutterBottom>
-//   format:
-//   https://bitcoin-pos.golightlyplus.com/?currency=[currency]&btcAddress=[public
-//   address]
-// </Typography>
-// <Typography variant="body1">Where:</Typography>
-// <Typography variant="body1">
-//   * currency is an acronym like USD.{' '}
-//   <a href="https://blockchain.info/api/exchange_rates_api">
-//     View available currencies
-//   </a>.
-// </Typography>
-// <Typography variant="body1" gutterBottom>
-//   * public address is your public bitcoin address.
-// </Typography>
-// <Typography variant="body1">
-//   To view a working URL demo,{' '}
-//
-// </Typography>
-// </Paper>
 // <Paper className={classes.paper}>
-// <Typography variant="headline" gutterBottom>
-//   How to use the app
-// </Typography>
-// <Typography variant="body1" gutterBottom>
-//   Simply enter the sale price in your chosen currency, and everything
-//   else will be done for you to generate the QR code to allow the buyer
-//   to send the bitcoin equivalent amount to your bitcoin address.
-// </Typography>
-// <TextField
-//   label="Your local currency"
-//   value={currency}
-//   className={classes.inputField}
-//   onChange={event =>
-//     this.setState({ currency: event.target.value })
-//   }
-// />
+//   <Typography variant="headline" gutterBottom>
+//     Super fast setup
+//   </Typography>
+//   <Typography variant="body1" gutterBottom>
+//     To avoid having to enter your Bitcoin address everytime here when
+//     you load this app, you can simply bookmark the next page in your
+//     browser.
+//   </Typography>
+//   <Typography variant="body1" gutterBottom>
+//     To view a demo of a bookmarked URL in action,{' '}
+//     <a href="/?currency=USD&btcAddress=1CXxYSYKTxTGhXsECmAQfe4sPkUgaedNmH">
+//       click here
+//     </a>.
+//   </Typography>
+// </Paper>

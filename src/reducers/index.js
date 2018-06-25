@@ -3,6 +3,7 @@ import {
   EXCHANGE_RATE_DATA_RECEIVED,
   SET_FIAT_CURRENCY,
   SET_BTC_ADDRESS,
+  UPDATE_FIAT_VALUE,
   AN_ERROR_OCCURRED
 } from '../actions/types';
 
@@ -13,8 +14,7 @@ const initialState = {
   fiatValue: '',
   btcAddress: '',
   error: null,
-  loading: true,
-  showQRcode: false
+  loading: true
 };
 
 export default (state = initialState, action) => {
@@ -32,6 +32,8 @@ export default (state = initialState, action) => {
       return { ...state, currency: action.payload };
     case SET_BTC_ADDRESS:
       return { ...state, btcAddress: action.payload };
+    case UPDATE_FIAT_VALUE:
+      return { ...state, fiatValue: action.payload };
     case AN_ERROR_OCCURRED:
       return { ...state, error: action.payload, loading: false };
     default:

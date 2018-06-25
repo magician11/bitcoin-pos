@@ -4,7 +4,8 @@ import {
   EXCHANGE_RATE_DATA_RECEIVED,
   SET_FIAT_CURRENCY,
   SET_BTC_ADDRESS,
-  AN_ERROR_OCCURRED
+  AN_ERROR_OCCURRED,
+  UPDATE_FIAT_VALUE
 } from './types';
 
 export const fetchExchangeRateData = () => async dispatch => {
@@ -31,4 +32,9 @@ export const setCurrency = currency => ({
 export const setBTCaddress = btcAddress => ({
   type: SET_BTC_ADDRESS,
   payload: btcAddress
+});
+
+export const updateFiatValue = fiatValue => ({
+  type: UPDATE_FIAT_VALUE,
+  payload: fiatValue
 });
