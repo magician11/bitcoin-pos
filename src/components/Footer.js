@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
+import { SUPPORT_EMAIL } from '../constants'
 import { paper, padding } from '../styles';
 
 const styles = () => ({ paper, padding });
@@ -20,8 +21,8 @@ class Footer extends Component {
         <Grid item xs={12} className={classes.padding}>
           <Typography variant="body1" gutterBottom align="center">
             Questions? Email{' '}
-            <a href="mailto:support@andrewgolightly.com">
-              support@andrewgolighly.com
+            <a href={`mailto:${SUPPORT_EMAIL}`}>
+              {SUPPORT_EMAIL}
             </a>
           </Typography>
           <Typography variant="body1" gutterBottom align="center">

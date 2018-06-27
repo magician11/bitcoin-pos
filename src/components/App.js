@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 
+import routes from '../constants/routes'
 import { marginTop } from '../styles';
 import Welcome from './Welcome';
 import PointOfSale from './PointOfSale';
@@ -25,9 +26,9 @@ class App extends Component {
             justify="center"
             className={this.props.classes.marginTop}
           >
-            <Route path="/" exact component={Welcome} />
-            <Route path="/point-of-sale" component={PointOfSale} />
-            <Route path="/invoice" component={Invoice} />
+            <Route path={routes.HOME} exact component={Welcome} />
+            <Route path={routes.POINT_OF_SALE} component={PointOfSale} />
+            <Route path={routes.INVOICE} component={Invoice} />
           </Grid>
           <Footer />
         </React.Fragment>

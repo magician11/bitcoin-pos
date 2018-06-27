@@ -9,22 +9,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { paper, magicNumber, marginTop } from '../styles';
 import * as actions from '../actions';
-
-const styles = () => ({
-  paper,
-  centerChilden: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  input: {
-    fontSize: magicNumber * 3
-  },
-  marginTop,
-  inputLabel: {
-    fontSize: magicNumber * 2
-  }
-});
+import routes from '../constants/routes';
 
 class PointOfSale extends Component {
   componentDidMount = () => {
@@ -41,7 +26,7 @@ class PointOfSale extends Component {
     } = this.props;
 
     if (!btcAddress || !currency) {
-      return <Redirect to={'/'} />;
+      return <Redirect to={routes.HOME} />;
     }
 
     let content;
@@ -53,7 +38,7 @@ class PointOfSale extends Component {
         <Grid item xs={12} md={4}>
           <Paper className={classes.paper}>
             <form
-              onSubmit={() => this.props.history.push('/invoice')}
+              onSubmit={() => this.props.history.push(routes.INVOICE)}
               className={classes.centerChilden}
             >
               <TextField
@@ -81,7 +66,7 @@ class PointOfSale extends Component {
                 color="primary"
                 className={classes.marginTop}
                 disabled={fiatValue === '' || parseFloat(fiatValue) === 0}
-                onClick={() => this.props.history.push('/invoice')}
+                onClick={() => this.props.history.push(routes.INVOICE)}
               >
                 Generate QR code
               </Button>
@@ -106,3 +91,21 @@ const mapStateToProps = ({
 export default connect(mapStateToProps, actions)(
   withRouter(withStyles(styles)(PointOfSale))
 );
+
+function styles () {
+  return {
+    paper,
+    centerChilden: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
+    input: {
+      fontSize: magicNumber * 3
+    },
+    marginTop,
+    inputLabel: {
+      fontSize: magicNumber * 2
+    }
+  }
+}
