@@ -12,7 +12,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import cx from 'classnames'
+import WAValidator from 'wallet-address-validator'
 
+import routes from '../constants/routes'
 import { paper, magicNumber, loader } from '../styles';
 // import { getURLparams } from '../utils';
 import * as actions from '../actions';
@@ -60,82 +63,88 @@ class Welcome extends Component {
   render() {
     const {
       classes,
-      exchangeRateData,
       btcAddress,
       currency,
       loading
     } = this.props;
 
-    let content;
     if (loading) {
-      if (btcAddress && currency) {
-        return <Redirect to={'/point-of-sale'} />;
-      }
-      content = <CircularProgress className={classes.loader} />;
-    } else {
-      const currencies = Object.keys(exchangeRateData).map(currency => (
-        <MenuItem value={currency} key={currency}>
-          {currency} ({exchangeRateData[currency].symbol})
-        </MenuItem>
-      ));
-      content = (
-        <Grid item xs={12} md={6}>
-          <Paper className={classes.paper}>
-            <Typography variant="headline" gutterBottom>
-              Welcome
-            </Typography>
-            <Typography variant="subheading" gutterBottom>
-              Quickly and easily generate a QR code to accept the Bitcoin
-              equivalent of an amount in the fiat currency of your choice.
-            </Typography>
-          </Paper>
-          <Paper className={classes.paper}>
-            <Typography variant="headline" gutterBottom>
-              Quick setup
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              All you need to do is set the Bitcoin address you want BTC sent
-              to, and what fiat currency you want to use for your sales.
-            </Typography>
-            <div className={classes.inputFields}>
-              <TextField
-                label="Your Bitcoin address"
-                value={btcAddress}
-                name="btcAddress"
-                className={`${classes.btcInputField} ${classes.margin}`}
-                onChange={this.handleChange}
-              />
-              <FormControl
-                className={`${classes.currencyInputField} ${classes.margin}`}
-              >
-                <InputLabel htmlFor="currency">Fiat currency</InputLabel>
-                <Select
-                  value={currency}
-                  onChange={this.handleChange}
-                  inputProps={{
-                    name: 'currency',
-                    id: 'currency'
-                  }}
-                >
-                  {currencies}
-                </Select>
-              </FormControl>
-            </div>
-            <Button
-              variant="raised"
-              color="primary"
-              className={classes.margin}
-              disabled={btcAddress === '' || currency === ''}
-              onClick={() => this.props.history.push('/point-of-sale')}
-            >
-              Begin
-            </Button>
-          </Paper>
-        </Grid>
-      );
+      return <CircularProgress className={classes.loader} />;
     }
+    if (loading && btcAddress && currency) {
+      return <Redirect to={routes.POINT_OF_SALE} />;
+      
+    } 
+    return (
+      <Grid item xs={12} md={6}>
+        <Paper className={classes.paper}>
+          <Typography variant="headline" gutterBottom>
+            Welcome
+          </Typography>
+          <Typography variant="subheading" gutterBottom>
+            Quickly and easily generate a QR code to accept the Bitcoin
+            equivalent of an amount in the fiat currency of your choice.
+          </Typography>
+        </Paper>
+        <Paper className={classes.paper}>
+          <Typography variant="headline" gutterBottom>
+            Quick setup
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            All you need to do is set the Bitcoin address you want BTC sent
+            to, and what fiat currency you want to use for your sales.
+          </Typography>
+          <div className={classes.inputFields}>
+            <TextField
+              label="Your Bitcoin address"
+              value={btcAddress}
+              name="btcAddress"
+              error={this.isBtcAddressInvalid}
+              className={cx(classes.btcInputField, classes.margin)}
+              helperText={this.isBtcAddressInvalid && 'this is not a valid bitcoin address'}
+              onChange={this.handleChange}
+            />
+            <FormControl
+              className={cx(classes.currencyInputField, classes.margin)}
+            >
+              <InputLabel htmlFor="currency">Fiat currency</InputLabel>
+              <Select
+                value={currency}
+                onChange={this.handleChange}
+                inputProps={{
+                  name: 'currency',
+                  id: 'currency'
+                }}
+              >
+                {this.currencies}
+              </Select>
+            </FormControl>
+          </div>
+          <Button
+            variant="raised"
+            color="primary"
+            className={classes.margin}
+            disabled={btcAddress === '' || currency === '' || this.isBtcAddressInvalid}
+            onClick={() => this.props.history.push(routes.POINT_OF_SALE)}
+          >
+            Begin
+          </Button>
+        </Paper>
+      </Grid>
+    );
+  }
 
-    return content;
+  get currencies() {
+    const { exchangeRateData } = this.props
+    return Object.keys(exchangeRateData).map(currency => (
+      <MenuItem value={currency} key={currency}>
+        {currency} ({exchangeRateData[currency].symbol})
+      </MenuItem>
+    ));
+  }
+  get isBtcAddressInvalid() {
+    const { btcAddress } = this.props
+    return !!btcAddress && !WAValidator.validate(btcAddress, 'BTC');
   }
 }
 

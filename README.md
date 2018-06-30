@@ -11,3 +11,13 @@ The Bitcoin Gold logo is taken from [bitcoin wiki](https://en.bitcoin.it/wiki/Pr
 Real time exchange rate calculations are taken from [blockchain.info](https://blockchain.info/api/exchange_rates_api)
 
 QR codes are generated from [Google Charts](https://developers.google.com/chart/infographics/docs/qr_codes).
+
+This project is bootstrapped by [create react app](https://github.com/facebook/create-react-app)
+
+## develop
+```bash
+$ git clone git@github.com:magician11/bitcoin-pos.git
+$ cd bitcoin-pos
+$ npm install
+$ npm start # starts local webpack dev server on localhost:3000
+```
