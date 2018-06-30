@@ -12,9 +12,12 @@ Real time exchange rate calculations are taken from [blockchain.info](https://bl
 
 QR codes are generated from [Google Charts](https://developers.google.com/chart/infographics/docs/qr_codes).
 
-This project is bootstrapped by [create react app](https://github.com/facebook/create-react-app)
+This project is bootstrapped by [Create React App](https://github.com/facebook/create-react-app).
 
-## develop
+## Development
+
+To clone and develop on it yourself...
+
 ```bash
 $ git clone git@github.com:magician11/bitcoin-pos.git
 $ cd bitcoin-pos
