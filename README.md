@@ -12,7 +12,7 @@ Real time exchange rate calculations are taken from [blockchain.info](https://bl
 
 QR codes are generated from [Google Charts](https://developers.google.com/chart/infographics/docs/qr_codes).
 
-This project is bootstrapted by [create react app](https://github.com/facebook/create-react-app)
+This project is bootstrapped by [create react app](https://github.com/facebook/create-react-app)
 
 ## develop
 ```bash
