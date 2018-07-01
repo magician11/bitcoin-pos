@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+
 import { paper, magicNumber, marginTop } from '../styles';
 import * as actions from '../actions';
 import routes from '../constants/routes';
@@ -88,11 +89,12 @@ const mapStateToProps = ({
   return { exchangeRateData, btcAddress, currency, fiatValue };
 };
 
-export default connect(mapStateToProps, actions)(
-  withRouter(withStyles(styles)(PointOfSale))
-);
+export default connect(
+  mapStateToProps,
+  actions
+)(withRouter(withStyles(styles)(PointOfSale)));
 
-function styles () {
+function styles() {
   return {
     paper,
     centerChilden: {
@@ -107,5 +109,5 @@ function styles () {
     inputLabel: {
       fontSize: magicNumber * 2
     }
-  }
+  };
 }

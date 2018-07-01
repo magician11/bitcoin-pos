@@ -12,12 +12,11 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import cx from 'classnames'
-import WAValidator from 'wallet-address-validator'
+import cx from 'classnames';
+import WAValidator from 'wallet-address-validator';
 
-import routes from '../constants/routes'
+import routes from '../constants/routes';
 import { paper, magicNumber, loader } from '../styles';
-// import { getURLparams } from '../utils';
 import * as actions from '../actions';
 
 const styles = theme => ({
@@ -41,14 +40,6 @@ const styles = theme => ({
 class Welcome extends Component {
   componentDidMount = () => {
     this.props.fetchExchangeRateData();
-    //
-    // const { currency, btcAddress } = getURLparams();
-    // if (currency) {
-    //   this.props.setCurrency(currency);
-    // }
-    // if (btcAddress) {
-    //   this.props.setBTCaddress(btcAddress);
-    // }
   };
 
   handleChange = event => {
@@ -61,20 +52,14 @@ class Welcome extends Component {
   };
 
   render() {
-    const {
-      classes,
-      btcAddress,
-      currency,
-      loading
-    } = this.props;
+    const { classes, btcAddress, currency, loading, error } = this.props;
 
-    if (loading) {
+    if (loading || error) {
       return <CircularProgress className={classes.loader} />;
     }
     if (loading && btcAddress && currency) {
       return <Redirect to={routes.POINT_OF_SALE} />;
-      
-    } 
+    }
     return (
       <Grid item xs={12} md={6}>
         <Paper className={classes.paper}>
@@ -91,8 +76,8 @@ class Welcome extends Component {
             Quick setup
           </Typography>
           <Typography variant="body1" gutterBottom>
-            All you need to do is set the Bitcoin address you want BTC sent
-            to, and what fiat currency you want to use for your sales.
+            All you need to do is set the Bitcoin address you want BTC sent to,
+            and what fiat currency you want to use for your sales.
           </Typography>
           <div className={classes.inputFields}>
             <TextField
@@ -101,7 +86,10 @@ class Welcome extends Component {
               name="btcAddress"
               error={this.isBtcAddressInvalid}
               className={cx(classes.btcInputField, classes.margin)}
-              helperText={this.isBtcAddressInvalid && 'this is not a valid bitcoin address'}
+              helperText={
+                this.isBtcAddressInvalid &&
+                'this is not a valid bitcoin address'
+              }
               onChange={this.handleChange}
             />
             <FormControl
@@ -124,7 +112,9 @@ class Welcome extends Component {
             variant="raised"
             color="primary"
             className={classes.margin}
-            disabled={btcAddress === '' || currency === '' || this.isBtcAddressInvalid}
+            disabled={
+              btcAddress === '' || currency === '' || this.isBtcAddressInvalid
+            }
             onClick={() => this.props.history.push(routes.POINT_OF_SALE)}
           >
             Begin
@@ -135,15 +125,16 @@ class Welcome extends Component {
   }
 
   get currencies() {
-    const { exchangeRateData } = this.props
+    const { exchangeRateData } = this.props;
     return Object.keys(exchangeRateData).map(currency => (
       <MenuItem value={currency} key={currency}>
         {currency} ({exchangeRateData[currency].symbol})
       </MenuItem>
     ));
   }
+
   get isBtcAddressInvalid() {
-    const { btcAddress } = this.props
+    const { btcAddress } = this.props;
     return !!btcAddress && !WAValidator.validate(btcAddress, 'BTC');
   }
 }
@@ -152,28 +143,13 @@ const mapStateToProps = ({
   currency,
   btcAddress,
   exchangeRateData,
-  loading
+  loading,
+  error
 }) => {
-  return { currency, btcAddress, exchangeRateData, loading };
+  return { currency, btcAddress, exchangeRateData, loading, error };
 };
 
-export default connect(mapStateToProps, actions)(
-  withRouter(withStyles(styles)(Welcome))
-);
-
-// <Paper className={classes.paper}>
-//   <Typography variant="headline" gutterBottom>
-//     Super fast setup
-//   </Typography>
-//   <Typography variant="body1" gutterBottom>
-//     To avoid having to enter your Bitcoin address everytime here when
-//     you load this app, you can simply bookmark the next page in your
-//     browser.
-//   </Typography>
-//   <Typography variant="body1" gutterBottom>
-//     To view a demo of a bookmarked URL in action,{' '}
-//     <a href="/?currency=USD&btcAddress=1CXxYSYKTxTGhXsECmAQfe4sPkUgaedNmH">
-//       click here
-//     </a>.
-//   </Typography>
-// </Paper>
+export default connect(
+  mapStateToProps,
+  actions
+)(withRouter(withStyles(styles)(Welcome)));

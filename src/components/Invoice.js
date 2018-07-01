@@ -8,7 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import Button from '@material-ui/core/Button';
 import RestartIcon from '@material-ui/icons/SettingsBackupRestore';
-import cx from 'classnames'
+import cx from 'classnames';
+
 import { marginTop, paper } from '../styles';
 import * as actions from '../actions';
 import routes from '../constants/routes';
@@ -18,7 +19,7 @@ const styles = () => ({ marginTop, paper });
 class Invoice extends Component {
   render() {
     if (this.needToRedirectTo) {
-      return <Redirect to={this.needToRedirectTo} />
+      return <Redirect to={this.needToRedirectTo} />;
     }
     const {
       classes,
@@ -36,10 +37,7 @@ class Invoice extends Component {
         <Grid item xs={12} md={4}>
           <Paper className={classes.paper}>
             <Typography variant="title">QR Code</Typography>
-            <img
-              src={this.qrCodeSrc}
-              alt="QR code"
-            />
+            <img src={this.qrCodeSrc} alt="QR code" />
             <Typography variant="subheading">Amount</Typography>
             <Typography variant="body1" gutterBottom>
               {this.btcEquiv} BTC (={' '}
@@ -75,34 +73,31 @@ class Invoice extends Component {
       </React.Fragment>
     );
   }
+
   onEnterNewSale = () => {
-    const { history, updateFiatValue } = this.props
+    const { history, updateFiatValue } = this.props;
     history.push(routes.POINT_OF_SALE);
     updateFiatValue('');
-  }
+  };
+
   get btcEquiv() {
-    const {
-      currency,
-      fiatValue,
-      exchangeRateData
-    } = this.props;
+    const { currency, fiatValue, exchangeRateData } = this.props;
     return (fiatValue / exchangeRateData[currency].last).toFixed(8);
   }
+
   get qrCodeSrc() {
-    const { btcAddress } = this.props
-    return `https://chart.googleapis.com/chart?chs=225x225&chld=L|2&cht=qr&chl=bitcoin:${btcAddress}?amount=${this.btcEquiv}`
+    const { btcAddress } = this.props;
+    return `https://chart.googleapis.com/chart?chs=225x225&chld=L|2&cht=qr&chl=bitcoin:${btcAddress}?amount=${
+      this.btcEquiv
+    }`;
   }
+
   get needToRedirectTo() {
-    const {
-      currency,
-      btcAddress,
-      fiatValue,
-      exchangeRateData,
-    } = this.props;
+    const { currency, btcAddress, fiatValue, exchangeRateData } = this.props;
     if (!btcAddress || !currency) {
-      return routes.HOME
+      return routes.HOME;
     } else if (!exchangeRateData || !fiatValue) {
-      return routes.POINT_OF_SALE
+      return routes.POINT_OF_SALE;
     }
   }
 }
@@ -114,6 +109,7 @@ const mapStateToProps = ({
   exchangeRateData
 }) => ({ currency, btcAddress, fiatValue, exchangeRateData });
 
-export default connect(mapStateToProps, actions)(
-  withRouter(withStyles(styles)(Invoice))
-);
+export default connect(
+  mapStateToProps,
+  actions
+)(withRouter(withStyles(styles)(Invoice)));

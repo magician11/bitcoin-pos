@@ -4,12 +4,13 @@ import { withStyles } from '@material-ui/core/styles';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 
-import routes from '../constants/routes'
+import routes from '../constants/routes';
 import { marginTop } from '../styles';
 import Welcome from './Welcome';
 import PointOfSale from './PointOfSale';
 import Invoice from './Invoice';
 import Header from './Header';
+import Error from './Error';
 import Footer from './Footer';
 
 const styles = { marginTop };
@@ -20,6 +21,7 @@ class App extends Component {
       <BrowserRouter>
         <React.Fragment>
           <CssBaseline />
+          <Error />
           <Header />
           <Grid
             container
