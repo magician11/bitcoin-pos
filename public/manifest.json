@@ -1,6 +1,6 @@
 {
   "short_name": "Bitcoin POS",
-  "name": "A Bitcoin point of sale app",
+  "name": "Bitcoin Point of Sale",
   "icons": [
     {
       "src": "Bitcoin.png",
@@ -8,7 +8,7 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
