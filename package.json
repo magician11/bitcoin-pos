@@ -7,6 +7,7 @@
     "@material-ui/icons": "^1.1.0",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "qrcode.react": "^0.8.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-number-format": "^3.4.2",

@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import NumberFormat from 'react-number-format';
 import Button from '@material-ui/core/Button';
 import RestartIcon from '@material-ui/icons/SettingsBackupRestore';
+import QRCode from 'qrcode.react';
 import cx from 'classnames';
 
 import { marginTop, paper } from '../styles';
@@ -37,7 +38,7 @@ class Invoice extends Component {
         <Grid item xs={12} md={4}>
           <Paper className={classes.paper}>
             <Typography variant="title">QR Code</Typography>
-            <img src={this.qrCodeSrc} alt="QR code" />
+            <QRCode value={this.getBitcoinURI} size={222} />
             <Typography variant="subheading">Amount</Typography>
             <Typography variant="body1" gutterBottom>
               {this.btcEquiv} BTC (={' '}
@@ -85,11 +86,9 @@ class Invoice extends Component {
     return (fiatValue / exchangeRateData[currency].last).toFixed(8);
   }
 
-  get qrCodeSrc() {
+  get getBitcoinURI() {
     const { btcAddress } = this.props;
-    return `https://chart.googleapis.com/chart?chs=225x225&chld=L|2&cht=qr&chl=bitcoin:${btcAddress}?amount=${
-      this.btcEquiv
-    }`;
+    return `bitcoin:${btcAddress}?amount=${this.btcEquiv}`;
   }
 
   get needToRedirectTo() {

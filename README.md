@@ -10,8 +10,6 @@ The Bitcoin Gold logo is taken from the [Bitcoin Wiki](https://en.bitcoin.it/wik
 
 Real time exchange rate calculations are taken from [blockchain.info](https://blockchain.info/api/exchange_rates_api).
 
-QR codes are generated from [Google Charts](https://developers.google.com/chart/infographics/docs/qr_codes).
-
 This project is bootstrapped by [Create React App](https://github.com/facebook/create-react-app).
 
 ## Development
