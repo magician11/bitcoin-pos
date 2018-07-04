@@ -91,6 +91,11 @@ class Welcome extends Component {
                 'this is not a valid bitcoin address'
               }
               onChange={this.handleChange}
+              onKeyPress={event => {
+                if (event.key === 'Enter') {
+                  this.props.history.push(routes.POINT_OF_SALE);
+                }
+              }}
             />
             <FormControl
               className={cx(classes.currencyInputField, classes.margin)}

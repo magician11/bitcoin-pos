@@ -38,30 +38,30 @@ class PointOfSale extends Component {
       content = (
         <Grid item xs={12} md={4}>
           <Paper className={classes.paper}>
-            <form
-              onSubmit={() => this.props.history.push(routes.INVOICE)}
-              className={classes.centerChilden}
-            >
-              <TextField
-                label={`Amount in ${currency} (${
-                  exchangeRateData[currency].symbol
-                })`}
-                value={fiatValue}
-                autoFocus
-                fullWidth
-                type="number"
-                onChange={event =>
-                  this.props.updateFiatValue(event.target.value)
+            <TextField
+              label={`Amount in ${currency} (${
+                exchangeRateData[currency].symbol
+              })`}
+              value={fiatValue}
+              autoFocus
+              fullWidth
+              type="number"
+              onChange={event => this.props.updateFiatValue(event.target.value)}
+              onKeyPress={event => {
+                if (event.key === 'Enter') {
+                  this.props.history.push(routes.INVOICE);
                 }
-                InputLabelProps={{
-                  className: classes.inputLabel
-                }}
-                inputProps={{
-                  step: 'any',
-                  className: classes.input,
-                  min: 0
-                }}
-              />
+              }}
+              InputLabelProps={{
+                className: classes.inputLabel
+              }}
+              inputProps={{
+                step: 'any',
+                className: classes.input,
+                min: 0
+              }}
+            />
+            <div className={classes.centerChilden}>
               <Button
                 variant="raised"
                 color="primary"
@@ -71,7 +71,7 @@ class PointOfSale extends Component {
               >
                 Generate QR code
               </Button>
-            </form>
+            </div>
           </Paper>
         </Grid>
       );
