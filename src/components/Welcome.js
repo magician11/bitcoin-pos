@@ -92,7 +92,7 @@ class Welcome extends Component {
               }
               onChange={this.handleChange}
               onKeyPress={event => {
-                if (event.key === 'Enter') {
+                if (!this.isBtcAddressInvalid && event.key === 'Enter') {
                   this.props.history.push(routes.POINT_OF_SALE);
                 }
               }}
